@@ -1,0 +1,244 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  DIRECTOR
+  COORDINADOR
+  DOCENTE
+}
+
+enum RiskLevel {
+  BAJO
+  MEDIO
+  ALTO
+}
+
+enum AttendanceStatus {
+  PRESENTE
+  TARDANZA
+  FALTA_JUSTIFICADA
+  FALTA_INJUSTIFICADA
+}
+
+enum PlanPriority {
+  Alta
+  Media
+  Baja
+}
+
+enum PlanStatus {
+  Pendiente
+  En_progreso
+  Completado
+  Cancelado
+}
+
+enum PlanPhase {
+  Diagnostico
+  Planificacion
+  Ejecucion
+  Seguimiento
+  Evaluacion
+}
+
+enum AlertSeverity {
+  CRITICA
+  ALTA
+  MEDIA
+  INFORMATIVA
+}
+
+model School {
+  id               String            @id @default(uuid())
+  name             String
+  modularCode      String            @unique
+  level            String            @default("Nivel Primario")
+  academicPeriod   String            @default("2024")
+  users            User[]
+  grades           Grade[]
+  teachers         Teacher[]
+  plans            ImprovementPlan[]
+  alerts           EducationalAlert[]
+  resourceMetrics  ResourceMetric[]
+  communityMetrics CommunityMetric[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(DIRECTOR)
+  schoolId     String
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Grade {
+  id          String             @id @default(uuid())
+  name        String
+  number      Int
+  level       String             @default("Primaria")
+  schoolId    String
+  school      School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  sections    Section[]
+  students    Student[]
+  attendance  AttendanceRecord[]
+  grades      GradeRecord[]
+  alerts      EducationalAlert[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@unique([schoolId, number])
+}
+
+model Section {
+  id        String    @id @default(uuid())
+  name      String
+  gradeId   String
+  grade     Grade     @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  students  Student[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([gradeId, name])
+}
+
+model SubjectArea {
+  id        String        @id @default(uuid())
+  name      String        @unique
+  code      String        @unique
+  grades    GradeRecord[]
+  createdAt DateTime      @default(now())
+}
+
+model Teacher {
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  specialty      String
+  status         String   @default("Activo")
+  trainingScore  Float    @default(85.0)
+  hoursCompleted Int      @default(32)
+  schoolId       String
+  school         School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Student {
+  id             String             @id @default(uuid())
+  code           String             @unique
+  firstName      String
+  lastName       String
+  riskLevel      RiskLevel          @default(BAJO)
+  attendanceRate Float              @default(92.0)
+  averageScore   Float              @default(15.5)
+  gradeId        String
+  grade          Grade              @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  sectionId      String
+  section        Section            @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  attendance     AttendanceRecord[]
+  grades         GradeRecord[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model AttendanceRecord {
+  id        String           @id @default(uuid())
+  date      DateTime
+  dayOfWeek String
+  status    AttendanceStatus @default(PRESENTE)
+  remarks   String?
+  studentId String
+  student   Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  gradeId   String
+  grade     Grade            @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  createdAt DateTime         @default(now())
+
+  @@index([date, gradeId])
+}
+
+model GradeRecord {
+  id            String      @id @default(uuid())
+  period        String      @default("2024")
+  month         String      @default("Agosto")
+  score         Float
+  studentId     String
+  student       Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjectAreaId String
+  subjectArea   SubjectArea @relation(fields: [subjectAreaId], references: [id], onDelete: Cascade)
+  gradeId       String
+  grade         Grade       @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@index([gradeId, subjectAreaId])
+}
+
+model ImprovementPlan {
+  id           String       @id @default(uuid())
+  title        String
+  description  String?
+  area         String
+  responsible  String
+  deadline     DateTime
+  priority     PlanPriority @default(Media)
+  status       PlanStatus   @default(Pendiente)
+  impact       String?
+  currentPhase PlanPhase    @default(Planificacion)
+  schoolId     String
+  school       School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model EducationalAlert {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  severity    AlertSeverity @default(MEDIA)
+  area        String
+  isResolved  Boolean       @default(false)
+  gradeId     String?
+  grade       Grade?        @relation(fields: [gradeId], references: [id], onDelete: SetNull)
+  schoolId    String
+  school      School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model ResourceMetric {
+  id         String   @id @default(uuid())
+  category   String
+  percentage Float
+  schoolId   String
+  school     School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  updatedAt  DateTime @default(now())
+}
+
+model CommunityMetric {
+  id        String   @id @default(uuid())
+  month     String
+  rate      Float
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  updatedAt DateTime @default(now())
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  role      String
+  content   String
+  dataJson  String?
+  createdAt DateTime @default(now())
+}
+
