@@ -159,7 +159,7 @@ El proyecto incluye soporte nativo para **Render** mediante `render.yaml` (Bluep
    - **Language:** `Node`
    - **Branch:** `main`
    - **Region:** Misma región elegida para la base de datos (ej. `Oregon`)
-   - **Build Command:** `npm install && npx prisma generate && npx prisma db push && npm run build`
+   - **Build Command:** `npm install --include=dev && npm run build`
    - **Start Command:** `npm run start`
    - **Plan:** `Free`
 

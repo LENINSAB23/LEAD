@@ -23,3 +23,4 @@ try {
   console.warn("Esto es normal si Render aísla la red durante el build. La conexión se efectuará en tiempo de ejecución.");
   process.exit(0);
 }
+
