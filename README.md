@@ -123,3 +123,59 @@ npm run build
 npm run start
 ```
 
+---
+
+## 4. Despliegue en Render (Paso a Paso)
+
+El proyecto incluye soporte nativo para **Render** mediante `render.yaml` (Blueprints) y despliegue manual.
+
+### Opción A: Despliegue Automático mediante Blueprints (Recomendado)
+1. Inicia sesión en [Render](https://dashboard.render.com).
+2. Haz clic en **New +** y selecciona **Blueprint**.
+3. Conecta tu repositorio de GitHub `https://github.com/LENINSAB23/LEAD`.
+4. Render leerá automáticamente el archivo `render.yaml`, creando:
+   - La base de datos PostgreSQL administrada (`lead-postgres`).
+   - El servicio web Next.js (`lead-analytics`), conectando automáticamente las variables de entorno.
+5. Haz clic en **Apply** y listo.
+
+### Opción B: Despliegue Manual desde el Dashboard de Render
+
+#### Paso 1: Crear la Base de Datos PostgreSQL en Render
+1. En el Dashboard de Render, haz clic en **New +** -> **PostgreSQL**.
+2. Configura los campos:
+   - **Name:** `lead-postgres`
+   - **Database:** `lead_db`
+   - **User:** `lead_admin`
+   - **Region:** `Oregon (US West)` (o la más cercana)
+   - **Plan:** `Free`
+3. Haz clic en **Create Database**.
+4. Una vez creada, copia el **Internal Database URL** (para servicios en la misma red de Render).
+
+#### Paso 2: Crear el Web Service en Render
+1. Haz clic en **New +** -> **Web Service**.
+2. Conecta el repositorio: `https://github.com/LENINSAB23/LEAD`.
+3. Completa los siguientes parámetros:
+   - **Name:** `lead-analytics`
+   - **Language:** `Node`
+   - **Branch:** `main`
+   - **Region:** Misma región elegida para la base de datos (ej. `Oregon`)
+   - **Build Command:** `npm install && npx prisma generate && npx prisma db push && npm run build`
+   - **Start Command:** `npm run start`
+   - **Plan:** `Free`
+
+#### Paso 3: Variables de Entorno en el Web Service
+En la pestaña **Environment** del Web Service, agrega:
+- `DATABASE_URL`: Pegar el **Internal Database URL** obtenido en el Paso 1.
+- `NODE_ENV`: `production`
+- `NEXTAUTH_SECRET`: Un texto aleatorio seguro (o presiona "Generate").
+- `NEXTAUTH_URL`: `https://tu-servicio.onrender.com` (la URL generada por Render).
+- `GEMINI_API_KEY`: *(Opcional)* Tu API Key de Google Gemini si deseas respuestas directas del modelo.
+
+#### Paso 4: Poblar la Base de Datos Inicial (Seed)
+En la pestaña **Shell** de tu Web Service en Render, ejecuta:
+```bash
+npm run prisma:seed
+```
+Esto insertará automáticamente la escuela demo, grados de 1° a 6°, docentes, estudiantes y los planes de mejora iniciales.
+
+
