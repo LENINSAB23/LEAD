@@ -1,10 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
+import { AppShell } from "@/components/layout/AppShell";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0b2341",
+};
 
 export const metadata: Metadata = {
   title: "LEAD - La escuela que aprende de sus datos",
@@ -23,17 +29,8 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <div className="flex min-h-screen bg-[#f1f5f9]">
-          <Sidebar />
-          <div className="flex-1 flex flex-col min-w-0">
-            <Header />
-            <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
-              {children}
-            </main>
-          </div>
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
 }
-

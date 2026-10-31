@@ -134,7 +134,7 @@ export function ImprovementPlansView({ initialData }: ImprovementPlansViewProps)
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-1">
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto no-scrollbar scroll-smooth">
         {["Planes activos", "Alertas", "Historial", "Impacto"].map((tab) => {
           const isActive = activeTab === tab;
           return (
@@ -352,12 +352,13 @@ export function ImprovementPlansView({ initialData }: ImprovementPlansViewProps)
       )}
 
       {/* Línea de tiempo de implementación */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-soft">
+      <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-100 shadow-soft">
         <h3 className="text-sm font-bold text-slate-800 mb-6">
           Línea de tiempo de implementación
         </h3>
 
-        <div className="relative flex items-center justify-between max-w-4xl mx-auto px-4">
+        <div className="overflow-x-auto pb-4 no-scrollbar">
+          <div className="relative flex items-center justify-between min-w-[500px] max-w-4xl mx-auto px-4">
           {/* Timeline background bar */}
           <div className="absolute left-8 right-8 top-3.5 h-1 bg-slate-200 -z-0" />
           <div className="absolute left-8 w-[25%] top-3.5 h-1 bg-sky-500 -z-0" />
@@ -398,6 +399,7 @@ export function ImprovementPlansView({ initialData }: ImprovementPlansViewProps)
               </div>
             );
           })}
+          </div>
         </div>
       </div>
 

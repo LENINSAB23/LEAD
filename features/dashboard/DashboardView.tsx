@@ -117,7 +117,7 @@ export function DashboardView({ initialData }: DashboardViewProps) {
       </div>
 
       {/* KPI Cards Row + General Trend */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
         {kpis.map((kpi) => {
           const Icon = iconMap[kpi.iconName] || GraduationCap;
           const isUp = kpi.trend === "up";

@@ -110,10 +110,29 @@ export function AiAssistantView() {
         </div>
       </div>
 
+      {/* Mobile Horizontal Quick Suggestion Chips */}
+      <div className="lg:hidden space-y-1.5">
+        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider pl-1">
+          Preguntas sugeridas:
+        </span>
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar scroll-smooth">
+          {suggestedQuestions.map((q) => (
+            <button
+              key={q}
+              onClick={() => handleSend(q)}
+              disabled={isLoading}
+              className="shrink-0 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-sky-800 shadow-xs hover:border-sky-300 active:scale-95 transition-all text-left max-w-[260px] truncate"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Main 2-Column Split */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Preguntas sugeridas + Privacidad */}
-        <div className="lg:col-span-4 space-y-4">
+        {/* Left Column: Preguntas sugeridas + Privacidad (Desktop) */}
+        <div className="hidden lg:block lg:col-span-4 space-y-4">
           <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-soft">
             <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
               Preguntas sugeridas
@@ -147,7 +166,7 @@ export function AiAssistantView() {
         </div>
 
         {/* Right Column: Chat History & Input */}
-        <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-100 shadow-soft flex flex-col h-[650px] overflow-hidden">
+        <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-100 shadow-soft flex flex-col h-[520px] sm:h-[580px] lg:h-[650px] overflow-hidden">
           {/* Chat Messages Scroll */}
           <div className="flex-1 p-6 overflow-y-auto space-y-5">
             {messages.map((msg) => {

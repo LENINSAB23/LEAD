@@ -125,14 +125,14 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-soft flex flex-wrap items-center gap-3">
+      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-soft grid grid-cols-2 sm:grid-cols-4 lg:flex lg:flex-wrap items-center gap-2.5 sm:gap-3">
         {/* Periodo */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500">Periodo:</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <span className="text-[11px] sm:text-xs font-semibold text-slate-500">Periodo:</span>
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500 w-full sm:w-auto"
           >
             <option value="2024">2024</option>
             <option value="2023">2023</option>
@@ -140,12 +140,12 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
         </div>
 
         {/* Grado */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500">Grado:</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <span className="text-[11px] sm:text-xs font-semibold text-slate-500">Grado:</span>
           <select
             value={grade}
             onChange={(e) => setGrade(e.target.value)}
-            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500 w-full sm:w-auto"
           >
             <option value="Todos">Todos</option>
             <option value="1°">1° Grado</option>
@@ -158,12 +158,12 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
         </div>
 
         {/* Sección */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500">Sección:</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <span className="text-[11px] sm:text-xs font-semibold text-slate-500">Sección:</span>
           <select
             value={section}
             onChange={(e) => setSection(e.target.value)}
-            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500 w-full sm:w-auto"
           >
             <option value="Todas">Todas</option>
             <option value="A">Sección A</option>
@@ -172,12 +172,12 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
         </div>
 
         {/* Área */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500">Área:</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+          <span className="text-[11px] sm:text-xs font-semibold text-slate-500">Área:</span>
           <select
             value={area}
             onChange={(e) => setArea(e.target.value)}
-            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            className="text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500 w-full sm:w-auto"
           >
             <option value="Todas">Todas</option>
             <option value="Matemática">Matemática</option>
@@ -187,13 +187,13 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
           </select>
         </div>
 
-        <button className="ml-auto px-4 py-1.5 bg-[#0284c7] hover:bg-sky-600 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
+        <button className="col-span-2 sm:col-span-4 lg:col-span-1 lg:ml-auto w-full lg:w-auto px-5 py-2 bg-[#0284c7] hover:bg-sky-600 text-white text-xs font-bold rounded-lg shadow-sm transition-colors text-center">
           Aplicar
         </button>
       </div>
 
       {/* Category Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-1 overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto no-scrollbar scroll-smooth">
         {tabs.map((tab) => {
           const isActive = activeTab === tab;
           return (
@@ -216,8 +216,8 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
       {/* Row 1 Charts: Desempeño por área & Evolución del aprendizaje */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Desempeño por área */}
-        <div className="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-100 shadow-soft">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="lg:col-span-6 bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-soft">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-sm font-bold text-slate-800">
                 Desempeño por área
@@ -226,7 +226,7 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
                 Comparativa vs promedio nacional
               </p>
             </div>
-            <div className="flex items-center gap-4 text-[11px]">
+            <div className="flex items-center gap-3 sm:gap-4 text-[11px] flex-wrap">
               <span className="flex items-center gap-1.5 font-medium text-slate-600">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#0284c7]" />
                 Promedio de la escuela
@@ -259,15 +259,15 @@ export function AnalyticsView({ initialData }: AnalyticsViewProps) {
         </div>
 
         {/* Evolución del aprendizaje */}
-        <div className="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-100 shadow-soft">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="lg:col-span-6 bg-white rounded-2xl p-4 sm:p-5 border border-slate-100 shadow-soft">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
             <div>
               <h3 className="text-sm font-bold text-slate-800">
                 Evolución del aprendizaje
               </h3>
               <p className="text-[11px] text-slate-400">Últimos 6 meses</p>
             </div>
-            <div className="flex items-center gap-4 text-[11px]">
+            <div className="flex items-center gap-3 sm:gap-4 text-[11px] flex-wrap">
               <span className="flex items-center gap-1.5 font-medium text-slate-600">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#0284c7]" />
                 Matemática
